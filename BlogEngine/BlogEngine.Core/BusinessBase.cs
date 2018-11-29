@@ -146,6 +146,8 @@
         /// </summary>
         public virtual TKey Id { get; set; }
 
+        public Guid AuthorUserId { get; set; }
+
         /// <summary>
         ///     Gets or sets the Blog instance ID this object is under.
         /// </summary>

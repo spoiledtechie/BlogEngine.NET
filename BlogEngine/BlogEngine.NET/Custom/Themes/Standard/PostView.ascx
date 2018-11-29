@@ -14,8 +14,11 @@
     var postUrl = Post.RelativeOrAbsoluteLink;
     var postTitle = Server.HtmlEncode(Post.Title);
     var postDate = Post.DateCreated.ToString("MMM dd, yyyy");
-    var authorUrl = Utils.AbsoluteWebRoot + "author/" + Utils.RemoveIllegalCharacters(Post.Author + BlogConfig.FileExtension);
-    var authorName = Post.AuthorProfile != null ? Utils.RemoveIllegalCharacters(Post.AuthorProfile.DisplayName) : Utils.RemoveIllegalCharacters(Post.Author);
+    var userId = Post.AuthorProfile != null ? Utils.CleanUsersName(Post.AuthorProfile.UserId) : Utils.CleanUsersName(Post.Author);
+
+    var authorUrl = Utils.AbsoluteWebRoot + "author/" + userId;
+    var authorName = Post.AuthorProfile != null ? Utils.CleanUsersName(Post.AuthorProfile.DisplayName) : Utils.CleanUsersName(Post.Author);
+
 
     var postCategory = CategoryLinks(", ");
     var postTags = "<div class=\"post-tags\">" + TagLinks(", ") + "</div>";

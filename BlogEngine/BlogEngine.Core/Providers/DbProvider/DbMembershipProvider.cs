@@ -1,7 +1,7 @@
 ﻿namespace BlogEngine.Core.Providers
 {
     using BlogEngine.Core.Data.Contracts;
-    using Models=BlogEngine.Core.Data.Models;
+    using Models = BlogEngine.Core.Data.Models;
     using Newtonsoft.Json.Linq;
     using System;
     using System.Collections.Generic;
@@ -18,7 +18,7 @@
     /// </summary>
     public class DbMembershipProvider : MembershipProvider, IMembershipProvider
     {
-        public const string MAIN_QUERY = "SELECT username, EmailAddress, lastLoginTime, Comment FROM {0}Users ";
+        public const string MAIN_QUERY = "SELECT userid, username, EmailAddress, lastLoginTime, Comment FROM {0}Users ";
         #region Fields
 
         /// <summary>
@@ -204,7 +204,7 @@
                 if (conn.HasConnection)
                 {
                     using (var cmd = conn.CreateTextCommand(string.Format(
-                        "SELECT password FROM {0}Users WHERE BlogID = {1}blogid AND userName = {1}name", 
+                        "SELECT password FROM {0}Users WHERE BlogID = {1}blogid AND userName = {1}name",
                         this.tablePrefix, this.parmPrefix)))
                     {
                         // Check Old Password
@@ -246,12 +246,12 @@
                         if (oldPasswordCorrect)
                         {
                             cmd.CommandText = string.Format(
-                                "UPDATE {0}Users SET password = {1}pwd WHERE BlogID = {1}blogid AND userName = {1}name", 
+                                "UPDATE {0}Users SET password = {1}pwd WHERE BlogID = {1}blogid AND userName = {1}name",
                                 this.tablePrefix, this.parmPrefix);
 
-                            cmd.Parameters.Add(conn.CreateParameter(FormatParamName("pwd"), 
-                                (this.passwordFormat == MembershipPasswordFormat.Hashed 
-                                    ? Utils.HashPassword(newPassword) 
+                            cmd.Parameters.Add(conn.CreateParameter(FormatParamName("pwd"),
+                                (this.passwordFormat == MembershipPasswordFormat.Hashed
+                                    ? Utils.HashPassword(newPassword)
                                     : newPassword)));
 
                             cmd.ExecuteNonQuery();
@@ -308,8 +308,8 @@
                 if (conn.HasConnection)
                 {
                     var sqlQuery = string.Format(
-                        "INSERT INTO {0}Users (blogId, userName, password, emailAddress, lastLoginTime) "+
-                                   "VALUES ({1}blogid, {1}name, {1}pwd, {1}email, {1}login)", 
+                        "INSERT INTO {0}Users (blogId, userName, password, emailAddress, lastLoginTime) " +
+                                   "VALUES ({1}blogid, {1}name, {1}pwd, {1}email, {1}login)",
                         this.tablePrefix, this.parmPrefix);
 
                     using (var cmd = conn.CreateTextCommand(sqlQuery))
@@ -348,7 +348,7 @@
                 if (conn.HasConnection)
                 {
                     using (var cmd = conn.CreateTextCommand(string.Format(
-                        "DELETE FROM {0}Users WHERE blogId = {1}blogid AND userName = {1}name", 
+                        "DELETE FROM {0}Users WHERE blogId = {1}blogid AND userName = {1}name",
                         this.tablePrefix, this.parmPrefix)))
                     {
                         cmd.Parameters.Add(conn.CreateParameter(FormatParamName("blogid"), Blog.CurrentInstance.Id.ToString()));
@@ -450,14 +450,15 @@
                         foreach (var record in jsonResultList)
                         {
                             try
-                            { 
+                            {
                                 users.Add(GetMembershipUser(
                                     record["Name"].ToString(),
                                     record["Name"].ToString(),
                                     record["EmailAddress"].ToString(),
                                     DateTime.Now,
                                     record.ToString()));
-                            }catch(Exception ex)
+                            }
+                            catch (Exception ex)
                             {
                                 Debug.WriteLine(record);
                             }
@@ -561,6 +562,7 @@
         {
             return this.GetUser(providerUserKey.ToString(), userIsOnline);
         }
+        
 
         /// <summary>
         /// Gets information from the data source for a user. Provides an option to update the last-activity date/time stamp for the user.
@@ -581,7 +583,7 @@
                 {
                     using (var cmd = conn.CreateTextCommand(
                         string.Format(
-                            mainQuery + " WHERE BlogID = {1}blogid AND UserName = {1}name", 
+                            mainQuery + " WHERE BlogID = {1}blogid AND UserName = {1}name",
                             this.tablePrefix, this.parmPrefix)))
                     {
                         cmd.Parameters.Add(conn.CreateParameter(FormatParamName("blogid"), Blog.CurrentInstance.Id.ToString()));
@@ -599,16 +601,46 @@
             }
             return user;
         }
+        public MembershipUser GetUser(int userId)
+        {
+            MembershipUser user = null;
+            var mainQuery = GetMainQuery();
+
+            using (var conn = this.CreateConnection())
+            {
+                if (conn.HasConnection)
+                {
+                    using (var cmd = conn.CreateTextCommand(
+                        string.Format(
+                            mainQuery + " WHERE BlogID = {1}blogid AND userid = {1}id",
+                            this.tablePrefix, this.parmPrefix)))
+                    {
+                        cmd.Parameters.Add(conn.CreateParameter(FormatParamName("blogid"), Blog.CurrentInstance.Id.ToString()));
+                        cmd.Parameters.Add(conn.CreateParameter(FormatParamName("id"), userId));
+
+                        using (var rdr = cmd.ExecuteReader())
+                        {
+                            if (rdr.Read())
+                            {
+                                user = ProcessMainQuery(rdr);
+                            }
+                        }
+                    }
+                }
+            }
+            return user;
+        }
         #region Code
 
         private MembershipUser ProcessMainQuery(DbDataReader rdr)
         {
-            var dataUserName = rdr.GetString(0);
-            var dataUserEmail = rdr.GetString(1);
-            var dataLastLogin = rdr.GetDateTime(2);
-            var dataComment = rdr.IsDBNull(3) ? null : rdr.GetString(3);
+            var dataUserId = rdr.GetInt32(0);
+            var dataUserName = rdr.GetString(1);
+            var dataUserEmail = rdr.GetString(2);
+            var dataLastLogin = rdr.GetDateTime(3);
+            var dataComment = rdr.IsDBNull(4) ? null : rdr.GetString(4);
 
-            var user = this.GetMembershipUser(dataUserName, dataUserName, dataUserEmail, dataLastLogin, dataComment);
+            var user = this.GetMembershipUser(dataUserName, dataUserId.ToString(), dataUserEmail, dataLastLogin, dataComment);
             return user;
         }
 
@@ -670,7 +702,7 @@
                 if (conn.HasConnection)
                 {
                     using (var cmd = conn.CreateTextCommand(string.Format(
-                        "SELECT userName FROM {0}Users WHERE BlogID = {1}blogid AND emailAddress = {1}email", 
+                        "SELECT userName FROM {0}Users WHERE BlogID = {1}blogid AND emailAddress = {1}email",
                         this.tablePrefix, this.parmPrefix)))
                     {
                         cmd.Parameters.Add(conn.CreateParameter(FormatParamName("blogid"), Blog.CurrentInstance.Id.ToString()));
@@ -816,7 +848,7 @@
                 {
 
                     using (var cmd = conn.CreateTextCommand(string.Format(
-                        "SELECT password FROM {0}Users WHERE BlogID = {1}blogid AND userName = {1}name", 
+                        "SELECT password FROM {0}Users WHERE BlogID = {1}blogid AND userName = {1}name",
                         this.tablePrefix, this.parmPrefix)))
                     {
                         // Check Old Password
@@ -836,12 +868,12 @@
                         if (!string.IsNullOrEmpty(oldPassword))
                         {
                             cmd.CommandText = string.Format(
-                                "UPDATE {0}Users SET password = {1}pwd WHERE BlogID = {1}blogid AND userName = {1}name", 
+                                "UPDATE {0}Users SET password = {1}pwd WHERE BlogID = {1}blogid AND userName = {1}name",
                                 this.tablePrefix, this.parmPrefix);
 
-                            cmd.Parameters.Add(conn.CreateParameter(FormatParamName("pwd"), 
-                                (this.passwordFormat == MembershipPasswordFormat.Hashed 
-                                    ? Utils.HashPassword(randomPassword) 
+                            cmd.Parameters.Add(conn.CreateParameter(FormatParamName("pwd"),
+                                (this.passwordFormat == MembershipPasswordFormat.Hashed
+                                    ? Utils.HashPassword(randomPassword)
                                     : randomPassword)));
 
                             cmd.ExecuteNonQuery();
@@ -879,7 +911,7 @@
                             "UPDATE {0}Users SET " +
                             "emailAddress = {1}email, " +
                             "Comment = {1}comment " +
-                            "WHERE BlogId = {1}blogId AND userName = {1}name", 
+                            "WHERE BlogId = {1}blogId AND userName = {1}name",
                             this.tablePrefix, this.parmPrefix)))
                     {
                         var parms = cmd.Parameters;
@@ -899,9 +931,10 @@
 
         public void UpdateContacts(MembershipUser user)
         {
-            var mappedFields = new Dictionary<string,string>();
+            var mappedFields = new Dictionary<string, string>();
             var profile = new Models.Profile(user.Comment);
             profile.UserName = user.UserName;
+            profile.RecordId = user.UserName;
 
             var paraList = new List<string>();
             var profProps = profile.GetType().GetProperties();
@@ -926,7 +959,7 @@
 
             using (var conn = this.CreateConnection())
             {
-                using(var cmd = conn.CreateTextCommand(commandText))
+                using (var cmd = conn.CreateTextCommand(commandText))
                 {
                     var parms = cmd.Parameters;
                     foreach (var prop in profProps)
@@ -958,7 +991,7 @@
                 if (conn.HasConnection)
                 {
                     using (var cmd = conn.CreateTextCommand(string.Format(
-                        "SELECT password FROM {0}Users WHERE BlogID = {1}blogid AND UserName = {1}name", 
+                        "SELECT password FROM {0}Users WHERE BlogID = {1}blogid AND UserName = {1}name",
                         this.tablePrefix, this.parmPrefix)))
                     {
                         cmd.Parameters.Add(conn.CreateParameter(FormatParamName("blogid"), Blog.CurrentInstance.Id.ToString()));
@@ -1022,6 +1055,8 @@
         {
             return $"{parmPrefix}{parameterName}";
         }
+
+
 
 
 

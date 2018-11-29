@@ -274,6 +274,14 @@ namespace BlogEngine.Core
             }
         }
 
+        public static bool IsWriter
+        {
+            get
+            {
+                return (Security.IsAuthenticated && Security.CurrentUser.IsInRole(BlogConfig.WriterRole));
+            }
+        }
+
         /// <summary>
         /// Returns an IEnumerable of Rights that belong to the ecurrent user.
         /// </summary>

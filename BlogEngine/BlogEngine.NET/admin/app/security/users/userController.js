@@ -25,13 +25,17 @@
     }
 
     $scope.launchProfilePage = function (user) {
-        var userName = "";
-        if (user.Profile.RecordId === "")
-            userName = user.Profile.UserName;
-        else
-            userName = user.Profile.RecordId;
+        console.log(user);
+        var userId = user.UserId;
 
-        location.href = "#/security/profile/?name=" + userName;
+        location.href = "#/security/profile/?id=" + userId;
+        
+        //if (user.Profile.RecordId === "")
+        //    userName = user.Profile.UserName;
+        //else
+        //    userName = user.Profile.RecordId;
+
+        //location.href = "#/security/profile/?name=" + userName;
     }
 
     $scope.loadEditForm = function (id) {

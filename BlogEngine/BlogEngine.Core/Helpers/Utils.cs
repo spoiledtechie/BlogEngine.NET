@@ -1086,6 +1086,37 @@
             return HttpUtility.HtmlEncode(text).Replace("%", string.Empty);
         }
 
+        public static string CleanUsersName(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return text;
+            }
+
+            text = text.Replace(":", string.Empty);
+            text = text.Replace("/", string.Empty);
+            text = text.Replace("?", string.Empty);
+            text = text.Replace("#", string.Empty);
+            text = text.Replace("[", string.Empty);
+            text = text.Replace("]", string.Empty);
+            text = text.Replace("@", string.Empty);
+            text = text.Replace("*", string.Empty);
+            text = text.Replace(".", string.Empty);
+            text = text.Replace(",", string.Empty);
+            text = text.Replace("\"", string.Empty);
+            text = text.Replace("&", string.Empty);
+            text = text.Replace("'", string.Empty);
+
+            text = text.Replace("–", "-"); // live writer passes char 8211  this inplace of a char 45 for hyphen
+            text = RemoveUnicodePunctuation(text); // moves any unicode versions of punctuation
+
+            
+            text = RemoveDiacritics(text);
+            text = RemoveExtraHyphen(text);
+
+            return HttpUtility.HtmlEncode(text).Replace("%", string.Empty);
+        }
+
         /// <summary>
         /// Sends a MailMessage object using the SMTP settings.
         /// </summary>

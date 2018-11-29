@@ -32,24 +32,27 @@
         {
             <li id="mu-dashboard" class="active"><a href="{{SiteVars.RelativeWebRoot}}admin/#/dashboard"><i class="fa fa-th-large"></i> @Resources.labels.dashboard</a></li>
         }
-        @if (Security.IsAuthorizedTo(Rights.AccessAdminSettingsPages))
+        @if (Security.IsAuthorizedTo(Rights.AccessAdminSettingsPages)|| Security.IsAuthorizedTo(Rights.CreateNewPosts))
         {
         <li id="mu-content">
             <a href="{{SiteVars.RelativeWebRoot}}admin/#/content/posts"><i class="fa fa-align-justify"></i> @Resources.labels.content</a>
             <ul class="sub-nav-sidebar">
                 <li id="mu-posts" data-ng-class="{ active: isActive('/content/posts')}"><a href="{{SiteVars.RelativeWebRoot}}admin/#/content/posts">@Resources.labels.posts</a></li>
-                @if (BlogSettings.Instance.CommentProvider == BlogSettings.CommentsBy.BlogEngine)
+                @if (Security.IsAuthorizedTo(Rights.AccessAdminSettingsPages))
                 {
-                    <li id="mu-comments" data-ng-class="{ active: isActive('/content/comments')}"><a href="{{SiteVars.RelativeWebRoot}}admin/#/content/comments">@Resources.labels.comments</a></li>
+                    if (BlogSettings.Instance.CommentProvider == BlogSettings.CommentsBy.BlogEngine)
+                    {
+                        <li id="mu-comments" data-ng-class="{ active: isActive('/content/comments')}"><a href="{{SiteVars.RelativeWebRoot}}admin/#/content/comments">@Resources.labels.comments</a></li>
+                    }
+                    <li id="mu-pages" data-ng-class="{ active: isActive('/content/pages')}"><a href="{{SiteVars.RelativeWebRoot}}admin/#/content/pages">@Resources.labels.pages</a></li>
+                    <li data-ng-class="{ active: isActive('/content/categories')}"><a href="{{SiteVars.RelativeWebRoot}}admin/#/content/categories">@Resources.labels.categories</a></li>
+                    <li data-ng-class="{ active: isActive('/content/tags')}"><a href="{{SiteVars.RelativeWebRoot}}admin/#/content/tags">@Resources.labels.tags</a></li>
+                    if (Blog.CurrentInstance.IsPrimary && Security.IsAdministrator && BlogConfig.UsageScenario.Contains("multiblogs"))
+                    {
+                        <li data-ng-class="{ active: isActive('/content/blogs')}"><a href="{{SiteVars.RelativeWebRoot}}admin/#/content/blogs">@Resources.labels.blogs</a></li>
+                    }
                 }
-                <li id="mu-pages" data-ng-class="{ active: isActive('/content/pages')}"><a href="{{SiteVars.RelativeWebRoot}}admin/#/content/pages">@Resources.labels.pages</a></li>
-                <li data-ng-class="{ active: isActive('/content/categories')}"><a href="{{SiteVars.RelativeWebRoot}}admin/#/content/categories">@Resources.labels.categories</a></li>
-                <li data-ng-class="{ active: isActive('/content/tags')}"><a href="{{SiteVars.RelativeWebRoot}}admin/#/content/tags">@Resources.labels.tags</a></li>
-                @if (Blog.CurrentInstance.IsPrimary && Security.IsAdministrator && BlogConfig.UsageScenario.Contains("multiblogs"))
-                {
-                    <li data-ng-class="{ active: isActive('/content/blogs')}"><a href="{{SiteVars.RelativeWebRoot}}admin/#/content/blogs">@Resources.labels.blogs</a></li>
-                }
-            </ul>
+                </ul>
         </li>
         }
         @if (Security.IsAuthorizedTo(Rights.ManageExtensions))
@@ -106,6 +109,7 @@
         }
         </ul>
 </div>
-<div class="logo-sidebar">
+
+@*<div class="logo-sidebar">
     <a href="https://blogengine.io/" target="_blank" title="BlogEngine.NET - Version @BlogSettings.Instance.Version()"><img src="~/admin/themes/standard/img/logo-sidebar.png" alt="BlogEngine.NET" /></a>
-</div>
+</div>*@

@@ -65,7 +65,7 @@
         {
             <div class="postMetaSingle">
                 <img src="@Href(Utils.RelativeWebRoot + "Custom/Themes/" + BlogSettings.Instance.Theme + "/images/ico_author.png")" />
-                An article by <a href="@(Utils.RelativeWebRoot + "author/" + Utils.RemoveIllegalCharacters(Model.Post.Author)).aspx">@(Model.Post.AuthorProfile != null ? Model.Post.AuthorProfile.DisplayName : Model.Post.Author)</a>
+                An article by <a href="@(Utils.RelativeWebRoot + "author/" + Utils.CleanUsersName(Model.Post.Author)).aspx">@(Model.Post.AuthorProfile != null ? Model.Post.AuthorProfile.DisplayName : Model.Post.Author)</a>
                 <img id="Img1" class="commentImage" src="@Href(Utils.RelativeWebRoot + "Custom/Themes/" + BlogSettings.Instance.Theme + "/images/ico_comments.png")" />
                 <a rel="nofollow" href="@Model.Post.RelativeLink#comment">@GetCommentString(Model.Post.ApprovedComments.Count)</a>
                 @Html.Raw(Model.AdminLinks)
@@ -84,7 +84,7 @@
                 <a class="more-link" href="@Model.Post.RelativeLink">Continue Reading »</a>
                 <div class="metaRight">
                     <img id="Img2" src="@Href(Utils.RelativeWebRoot + "Custom/Themes/" + BlogSettings.Instance.Theme + "/images/ico_author.png")" />
-                    An article by <a href="@(Utils.RelativeWebRoot + "author/" + Utils.RemoveIllegalCharacters(Model.Post.Author)).aspx">@(Model.Post.AuthorProfile != null ? Model.Post.AuthorProfile.DisplayName : Model.Post.Author)</a>
+                    An article by <a href="@(Utils.RelativeWebRoot + "author/" + Utils.CleanUsersName(Model.Post.Author)).aspx">@(Model.Post.AuthorProfile != null ? Model.Post.AuthorProfile.DisplayName : Model.Post.Author)</a>
                     <img id="Img3" class="commentImage" src="@Href(Utils.RelativeWebRoot + "Custom/Themes/" + BlogSettings.Instance.Theme + "/images/ico_comments.png")"  />
                     <a rel="nofollow" href="@Model.Post.RelativeLink#comment">@GetCommentString(Model.Post.ApprovedComments.Count)</a>
                 </div>

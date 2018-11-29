@@ -13,9 +13,9 @@
     $scope.load = function () {
         spinOn();
         // if the name is provided in url parameter then use it
-        $scope.userName = $scope.getParameterByName("name", UserVars.Name);
-
-        dataService.getItems('/api/users/' + $scope.userName)
+        $scope.userId = $scope.getParameterByName("id", UserVars.UserId);
+        console.log(UserVars);
+        dataService.getItems('/api/users/' + $scope.userId)
         .success(function (data) {
             angular.copy(data, $scope.user);
             $scope.loadCustom();

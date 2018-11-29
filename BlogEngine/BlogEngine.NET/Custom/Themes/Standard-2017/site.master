@@ -82,12 +82,6 @@
                         <p>
                             Copyright &copy; <%=DateTime.Now.Year %>
                         </p>
-                        <p>
-                            Powered by <a href="https://blogengine.io/" target="_blank" title="BlogEngine.NET <%=BlogSettings.Instance.Version() %>">BlogEngine.NET</a>
-                        </p>
-                        <p>
-                            Designed by <a href="http://francis.bio/" rel="nofollow" target="_blank">Francis Bio</a>
-                        </p>
                     </footer>
                 </aside>
                 <div class="blog-content admin-alerts-[CUSTOMFIELD|THEME|Standard-2017|Home Alert Box (true or false?)|true/]">

@@ -12,3 +12,5 @@
 /BlogEngine/BlogEngine.NET/App_Data/PublishProfiles/*.user
 /BlogEngine/BlogEngine.NET/*.user
 /BlogEngine/BlogEngine.NET/Properties/PublishProfiles/*.user
+/BlogEngine/BlogEngine.NET/node_modules
+/BlogEngine/BlogEngine.NET/obj

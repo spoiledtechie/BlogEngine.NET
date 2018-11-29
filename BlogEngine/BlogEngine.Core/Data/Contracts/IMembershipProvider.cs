@@ -10,5 +10,7 @@ namespace BlogEngine.Core.Data.Contracts
     public interface IMembershipProvider
     {
         MembershipUserCollection GetAllUsers(int pageIndex, int pageSize, out int totalRecords, string process);
+
+        MembershipUser GetUser(int userId);
     }
 }

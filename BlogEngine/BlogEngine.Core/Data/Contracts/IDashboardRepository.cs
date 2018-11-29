@@ -11,6 +11,6 @@ namespace BlogEngine.Core.Data.Contracts
         /// Get all dashboard items
         /// </summary>
         /// <returns>Dashboard view model</returns>
-        DashboardVM Get();
+        DashboardVM Get(bool showSelfPosts);
     }
 }

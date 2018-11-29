@@ -21,7 +21,7 @@ namespace BlogEngine.Core.Data
         /// <param name="skip">Records to skip</param>
         /// <param name="take">Records to take</param>
         /// <returns>List of users</returns>
-        public IEnumerable<BlogUser> Find(int take = 10, int skip = 0, string filter = "", string order = "", string process=null)
+        public IEnumerable<BlogUser> Find(int take = 10, int skip = 0, string filter = "", string order = "", string process = null)
         {
             if (!Security.IsAuthorizedTo(Rights.AccessAdminPages))
                 throw new UnauthorizedAccessException();
@@ -43,6 +43,7 @@ namespace BlogEngine.Core.Data
                         IsChecked = false,
                         UserName = m.UserName,
                         Email = m.Email,
+                        UserId = (int)m.ProviderUserKey,
                         Profile = GetProfileFromComment(m)
                     });
                 }
@@ -56,6 +57,7 @@ namespace BlogEngine.Core.Data
                         IsChecked = false,
                         UserName = m.UserName,
                         Email = m.Email,
+                        UserId = Convert.ToInt32(m.ProviderUserKey),
                         Profile = GetProfile(m.UserName),
                         Roles = GetRoles(m.UserName)
                     });
@@ -77,6 +79,25 @@ namespace BlogEngine.Core.Data
             return profile;
         }
 
+        public BlogUser GetUser(int id)
+        {
+
+            var provider = Membership.Provider as IMembershipProvider;
+
+            var user = provider.GetUser(Convert.ToInt32(id));
+
+            return new BlogUser
+            {
+                IsChecked = false,
+                UserName = user.UserName,
+                UserId = Convert.ToInt32(user.ProviderUserKey),
+                Email = user.Email,
+                Profile = GetProfile(user.UserName),
+                Roles = GetRoles(user.UserName)
+            };
+
+        }
+
         /// <summary>
         /// Get single post
         /// </summary>
@@ -91,12 +112,13 @@ namespace BlogEngine.Core.Data
             int count;
 
             var process = "not-assigned";
-                if(id.Count(f=>f=='-') > 3)
+            if (id.Count(f => f == '-') > 3)
             {
                 process = "contacts";
             }
 
             var provider = Membership.Provider as IMembershipProvider;
+
 
             var userCollection = provider.GetAllUsers(0, 999, out count, process);
             var members = userCollection.Cast<MembershipUser>().ToList();
@@ -142,6 +164,8 @@ namespace BlogEngine.Core.Data
         {
             if (!Security.IsAuthorizedTo(Rights.CreateNewUsers))
                 throw new UnauthorizedAccessException();
+
+            user.UserName = user.Email;
 
             if (user == null || string.IsNullOrEmpty(user.UserName)
                 || string.IsNullOrEmpty(user.Email) || string.IsNullOrEmpty(user.Password))
@@ -189,8 +213,8 @@ namespace BlogEngine.Core.Data
 
             // Ensure that if email is changed that the profile email is changed as well
             user.Profile.EmailAddress = member.Email;
-			
-			//change user password
+
+            //change user password
             if (!string.IsNullOrEmpty(user.OldPassword) && !string.IsNullOrEmpty(user.Password))
                 ChangePassword(member, user.OldPassword, user.Password);
 
@@ -212,7 +236,7 @@ namespace BlogEngine.Core.Data
                 throw new UnauthorizedAccessException();
 
             if (!Self(user.UserName) && !Security.IsAuthorizedTo(Rights.EditOtherUsers))
-                    throw new UnauthorizedAccessException();
+                throw new UnauthorizedAccessException();
 
             return UpdateUserProfile(user);
         }
@@ -222,7 +246,8 @@ namespace BlogEngine.Core.Data
         /// </summary>
         /// <param name="id">User ID</param>
         /// <returns>True on success</returns>
-        public bool Remove(string id){
+        public bool Remove(string id)
+        {
 
             if (string.IsNullOrEmpty(id))
                 return false;
@@ -308,13 +333,13 @@ namespace BlogEngine.Core.Data
         static bool UpdateUserProfile(BlogUser user)
         {
             // If the profile email changed be sure to update membership to match
-            if (user.Profile!=null)
+            if (user.Profile != null)
             {
                 // update user
                 var member = Membership.GetUser(user.UserName);
                 if (member == null)
                 {
-                    member = Membership.CreateUser(user.UserName,"@password", user.Profile.EmailAddress);
+                    member = Membership.CreateUser(user.UserName, "@password", user.Profile.EmailAddress);
                 }
 
                 if (member != null)
@@ -326,6 +351,8 @@ namespace BlogEngine.Core.Data
 
                     Membership.UpdateUser(member);
                     user.Email = member.Email;
+                    user.UserId =Convert.ToInt32( member.ProviderUserKey);
+                    user.Profile.UserId = user.UserId.ToString();
                 }
             }
             var result = AuthorProfile.UpdateUserProfile(user);
@@ -345,7 +372,7 @@ namespace BlogEngine.Core.Data
                 {
                     string[] roles = user.Roles.Where(ur => ur.IsChecked).Select(r => r.RoleName).ToArray();
 
-                    if(roles.Length > 0)
+                    if (roles.Length > 0)
                         Roles.AddUsersToRoles(new string[] { user.UserName }, roles);
                     else
                         Roles.AddUsersToRoles(new string[] { user.UserName }, new string[] { BlogConfig.AnonymousRole });

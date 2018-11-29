@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -40,7 +40,7 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -80,6 +80,12 @@
     <Reference Include="Dynamic, Version=1.0.0.0, Culture=neutral, PublicKeyToken=68293a411f0cabcc, processorArchitecture=MSIL">
       <HintPath>..\packages\DynamicQuery.1.0\lib\35\Dynamic.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\..\lib\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
@@ -94,6 +100,7 @@
       <HintPath>..\packages\NuGet.Core.2.8.2\lib\net40-Client\NuGet.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -105,6 +112,7 @@
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web">
@@ -117,9 +125,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Authors\AuthorDb.cs" />
+    <Compile Include="Data\Context\BlogEngineManagementContext.cs" />
+    <Compile Include="Data\Context\ContactDb.cs" />
+    <Compile Include="Data\Contracts\IFundsRepository.cs" />
     <Compile Include="Data\Contracts\IMembershipProvider.cs" />
     <Compile Include="Data\Contracts\IWidgetsRepository.cs" />
     <Compile Include="Data\Contracts\IDashboardRepository.cs" />
+    <Compile Include="Data\Financials\FundsForWriter.cs" />
+    <Compile Include="Data\Financials\MonthlyStatementDb.cs" />
+    <Compile Include="Data\FundsRepository.cs" />
+    <Compile Include="Data\Posts\PostDb.cs" />
+    <Compile Include="Data\RSS\RSSFeedDb.cs" />
+    <Compile Include="Data\RSS\RSSFeedCategoryDb.cs" />
+    <Compile Include="Data\RSS\RSSFeedTagsDb.cs" />
     <Compile Include="Data\Services\TagCloud.cs" />
     <Compile Include="Data\ViewModels\BlogRollVM.cs" />
     <Compile Include="Data\WidgetsRepository.cs" />
@@ -130,6 +149,19 @@
     <Compile Include="Data\ViewModels\DashboardVM.cs" />
     <Compile Include="Data\ViewModels\SettingsVM.cs" />
     <Compile Include="Data\ViewModels\WidgetsVM.cs" />
+    <Compile Include="Data\Authors\AuthorManager.cs" />
+    <Compile Include="Funds\Fund.cs" />
+    <Compile Include="Funds\Funds.cs" />
+    <Compile Include="Funds\MonthlyStatementsFactory.cs" />
+    <Compile Include="Funds\Monthly\Statement.cs" />
+    <Compile Include="Funds\Monthly\TotalPayment.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Posts\Classes\Post.cs" />
+    <Compile Include="Posts\PostManager.cs" />
+    <Compile Include="RSS\RSSFactory.cs" />
+    <Compile Include="RSS\RSSFeedCategory.cs" />
+    <Compile Include="RSS\RSSFeedItem.cs" />
+    <Compile Include="RSS\RSSFeedTag.cs" />
     <Compile Include="Services\Syndication\BlogML\BaseReader.cs" />
     <Compile Include="Services\Syndication\BlogML\BlogImporter.cs" />
     <Compile Include="Services\Syndication\BlogML\BlogMLExtendedPost.cs" />
@@ -319,7 +351,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\StateCollection.cs" />
     <Compile Include="Helpers\Utils.cs" />
-    <Compile Include="Providers\XmlProvider\XmlMembershipProvider.cs" />
     <Compile Include="Web\HttpHandlers\SyndicationHandler.cs" />
     <Compile Include="Web\HttpHandlers\TrackbackHandler.cs" />
     <Compile Include="Web\HttpModules\CompressionModule.cs" />
@@ -358,7 +389,6 @@
     <Compile Include="Providers\XmlProvider\Settings.cs" />
     <Compile Include="Providers\XmlProvider\Pages.cs" />
     <Compile Include="Providers\XmlProvider\Posts.cs" />
-    <Compile Include="Providers\XmlProvider\XmlRoleProvider.cs" />
     <Compile Include="Referrer.cs" />
     <Compile Include="Role.cs" />
     <Compile Include="Services\Syndication\SyndicationGenerator.cs" />
@@ -394,6 +424,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="key.snk" />
     <None Include="packages.config" />
     <None Include="Service References\GalleryServer\service.edmx" />
@@ -414,6 +445,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Web\HttpHandlers\JavaScriptHandler.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Author\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common.EmailServer\Common.EmailServer.Library\Common.EmailServer.Library.csproj">
+      <Project>{8F5564DD-897D-4567-9803-E506B38AD361}</Project>
+      <Name>Common.EmailServer.Library</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Common.Payment\Common.Payment.csproj">
+      <Project>{5D6CE564-BA97-4344-BE2E-A680A75A03A5}</Project>
+      <Name>Common.Payment</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Common.Site\Common.Site.csproj">
+      <Project>{e0f7aafe-6666-4a19-947f-f3fe60381154}</Project>
+      <Name>Common.Site</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\common.utilities\common.utilities\Common.Utilities.csproj">
+      <Project>{a7752738-8c81-4e4f-ab17-ea760f66bed7}</Project>
+      <Name>Common.Utilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

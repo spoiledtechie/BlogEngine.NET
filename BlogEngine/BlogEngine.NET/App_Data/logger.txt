@@ -1,0 +1,36 @@
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+Date: 11/26/2018 3:10:49 PM
+Error editing profile: Object reference not set to an instance of an object.
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+Date: 11/26/2018 3:12:52 PM
+PUT http://localhost:64080/api/users/saveprofile/item: Invalid object name 'Contact'.
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+Date: 11/26/2018 3:55:02 PM
+GET http://localhost:64080/api/users?filter=1+%3d%3d+1&order=UserName&skip=0&take=0: An item with the same key has already been added.
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+Date: 11/26/2018 4:15:27 PM
+Error editing profile: Object reference not set to an instance of an object.
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+Date: 11/26/2018 4:34:54 PM
+Error editing profile: Object reference not set to an instance of an object.
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+Date: 11/26/2018 4:38:33 PM
+PUT http://localhost:64080/api/users/saveprofile/item: Cannot update identity column 'RecordId'.
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+Date: 11/27/2018 5:48:21 PM
+Error editing profile: Object reference not set to an instance of an object.
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+Date: 11/27/2018 5:48:38 PM
+PUT http://localhost:64080/api/users/update/item: Error reading JObject from JsonReader. Path '', line 0, position 0.
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+Date: 11/27/2018 11:38:31 PM
+GET http://localhost:64080/api/users/admin: Input string was not in a correct format.
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+Date: 11/28/2018 9:29:10 PM
+GET http://localhost:64080/api/users/admin: Input string was not in a correct format.
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+Date: 11/28/2018 9:30:36 PM
+GET http://localhost:64080/api/users/admin: Input string was not in a correct format.
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+Date: 11/28/2018 9:34:16 PM
+GET http://localhost:64080/api/users/admin: Input string was not in a correct format.

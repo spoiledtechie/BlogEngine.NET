@@ -24,7 +24,7 @@ namespace BlogEngine.Core
         private string website;
         private string aboutMe;
         private string address;
-        private string addressAlt; 
+        private string addressAlt;
         private string recordId;
         private DateTime birthday;
         private string cityTown;
@@ -519,6 +519,9 @@ namespace BlogEngine.Core
                 return false;
 
             var authorProfile = GetProfile(user.UserName) ?? new AuthorProfile(user.UserName);
+            if (user.UserId > 0)
+                authorProfile.UserId = user.UserId.ToString();
+
             try
             {
                 var srcProps = user.Profile.GetType().GetProperties();
@@ -546,7 +549,7 @@ namespace BlogEngine.Core
                                     break;
 
                                 default:
-                                        dest.SetValue(authorProfile, $"{value}");
+                                    dest.SetValue(authorProfile, $"{value}");
                                     break;
                             }
                         }

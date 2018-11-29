@@ -16,14 +16,14 @@ namespace BlogEngine.Core.Data.ViewModels
         /// <summary>
         /// Dashboard vm
         /// </summary>
-        public DashboardVM()
+        public DashboardVM(bool showSelfPosts)
         {
             _posts = new List<PostItem>();
             _pages = new List<PageItem>();
             _comments = new List<Comment>();
             _trash = new List<TrashItem>();
 
-            LoadProperties();
+            LoadProperties(showSelfPosts);
         }
 
         #region Properties
@@ -53,7 +53,7 @@ namespace BlogEngine.Core.Data.ViewModels
             get
             {
                 var comments = new List<CommentItem>();
-                foreach(var c in _comments.AsQueryable().OrderBy("DateCreated desc").Take(5).ToList())
+                foreach (var c in _comments.AsQueryable().OrderBy("DateCreated desc").Take(5).ToList())
                 {
                     comments.Add(Json.GetComment(c, _comments));
                 }
@@ -103,16 +103,21 @@ namespace BlogEngine.Core.Data.ViewModels
 
         #region Private methods
 
-        private void LoadProperties()
+        private void LoadProperties(bool showSelfPosts)
         {
-            LoadPosts();
-            LoadPages();
-            LoadTrash();
+            LoadPosts(showSelfPosts);
+            LoadPages(showSelfPosts);
+            LoadTrash(showSelfPosts);
         }
 
-        private void LoadPosts()
+        private void LoadPosts(bool showSelfPosts)
         {
             var posts = Post.ApplicablePosts.Where(p => p.IsVisible);
+
+            if (showSelfPosts)
+                posts = posts.Where(x => x.Author == Security.CurrentUser.Identity.Name);
+
+
             DraftPosts = new List<PostItem>();
             foreach (var p in posts.Where(p => p.IsPublished == false && p.IsDeleted == false).ToList())
             {
@@ -130,9 +135,13 @@ namespace BlogEngine.Core.Data.ViewModels
             }
         }
 
-        private void LoadPages()
+        private void LoadPages(bool showSelfPosts)
         {
             var pages = Page.Pages.Where(p => p.IsVisible);
+
+            if (showSelfPosts)
+                pages = pages.Where(x => x.Author == Security.CurrentUser.Identity.Name);
+
             DraftPages = new List<PageItem>();
             foreach (var p in pages.Where(p => p.IsPublished == false && p.IsDeleted == false).ToList())
             {
@@ -142,22 +151,27 @@ namespace BlogEngine.Core.Data.ViewModels
             PagePublishedCnt = pages.Where(p => p.IsPublished).ToList().Count;
         }
 
-        private void LoadTrash()
+        private void LoadTrash(bool showSelfPosts)
         {
             var posts = Post.DeletedPosts;
+
+            if (showSelfPosts)
+                posts = posts.Where(x => x.Author == Security.CurrentUser.Identity.Name).ToList();
+
+
             _trash = new List<TrashItem>();
             if (posts.Any())
             {
                 foreach (var p in posts)
                 {
                     _trash.Add(new TrashItem
-                        {
-                            Id = p.Id,
-                            Title = System.Web.HttpContext.Current.Server.HtmlEncode(p.Title),
-                            RelativeUrl = p.RelativeLink,
-                            ObjectType = "Post",
-                            DateCreated = p.DateCreated.ToString("MM/dd/yyyy HH:mm")
-                        }
+                    {
+                        Id = p.Id,
+                        Title = System.Web.HttpContext.Current.Server.HtmlEncode(p.Title),
+                        RelativeUrl = p.RelativeLink,
+                        ObjectType = "Post",
+                        DateCreated = p.DateCreated.ToString("MM/dd/yyyy HH:mm")
+                    }
                     );
                 }
             }
@@ -167,13 +181,13 @@ namespace BlogEngine.Core.Data.ViewModels
                 foreach (var page in pages)
                 {
                     _trash.Add(new TrashItem
-                        {
-                            Id = page.Id,
-                            Title = System.Web.HttpContext.Current.Server.HtmlEncode(page.Title),
-                            RelativeUrl = page.RelativeLink,
-                            ObjectType = "Page",
-                            DateCreated = page.DateCreated.ToString("MM/dd/yyyy HH:mm")
-                        }
+                    {
+                        Id = page.Id,
+                        Title = System.Web.HttpContext.Current.Server.HtmlEncode(page.Title),
+                        RelativeUrl = page.RelativeLink,
+                        ObjectType = "Page",
+                        DateCreated = page.DateCreated.ToString("MM/dd/yyyy HH:mm")
+                    }
                     );
                 }
             }
@@ -192,13 +206,13 @@ namespace BlogEngine.Core.Data.ViewModels
                 foreach (var c in comms)
                 {
                     _trash.Add(new TrashItem
-                        {
-                            Id = c.Id,
-                            Title = c.Author + ": " + c.Teaser,
-                            RelativeUrl = c.RelativeLink,
-                            ObjectType = "Comment",
-                            DateCreated = c.DateCreated.ToString("MM/dd/yyyy HH:mm")
-                        }
+                    {
+                        Id = c.Id,
+                        Title = c.Author + ": " + c.Teaser,
+                        RelativeUrl = c.RelativeLink,
+                        ObjectType = "Comment",
+                        DateCreated = c.DateCreated.ToString("MM/dd/yyyy HH:mm")
+                    }
                     );
                 }
             }

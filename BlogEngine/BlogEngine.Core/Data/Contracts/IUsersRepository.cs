@@ -16,13 +16,16 @@ namespace BlogEngine.Core.Data.Contracts
         /// <param name="skip">Records to skip</param>
         /// <param name="take">Records to take</param>
         /// <returns>List of users</returns>
-        IEnumerable<BlogUser> Find(int take = 10, int skip = 0, string filter = "", string order = "", string process=null);
+        IEnumerable<BlogUser> Find(int take = 10, int skip = 0, string filter = "", string order = "", string process = null);
         /// <summary>
         /// Get single post
         /// </summary>
         /// <param name="id">User id</param>
         /// <returns>User object</returns>
         BlogUser FindById(string id);
+
+        BlogUser GetUser(int id);
+
         /// <summary>
         /// Add new user
         /// </summary>

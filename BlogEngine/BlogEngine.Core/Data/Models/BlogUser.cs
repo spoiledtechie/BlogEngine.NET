@@ -6,6 +6,7 @@ namespace BlogEngine.Core.Data.Models
     /// </summary>
     public class BlogUser
     {
+        public int UserId { get; set; }
         /// <summary>
         /// If checked in the UI
         /// </summary>

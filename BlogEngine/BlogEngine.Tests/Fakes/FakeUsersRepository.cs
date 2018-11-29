@@ -37,5 +37,10 @@ namespace BlogEngine.Tests.Fakes
         {
             return true;
         }
+
+        public BlogUser GetUser(int id)
+        {
+            return new BlogUser();
+        }
     }
 }

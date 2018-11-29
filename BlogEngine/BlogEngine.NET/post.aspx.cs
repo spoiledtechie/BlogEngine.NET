@@ -4,6 +4,9 @@ using BlogEngine.Core;
 using BlogEngine.Core.Web.Controls;
 using System.Collections.Generic;
 using System.IO;
+using Common.Site.Classes.Network;
+using System.Web;
+using BlogEngine.Core.Posts;
 
 public partial class post : BlogBasePage
 {
@@ -35,7 +38,7 @@ public partial class post : BlogBasePage
                     // If there's more than one post that has the same RelativeLink
                     // this post has then don't do a 301 redirect.
 
-                    if (Post.Posts.FindAll(delegate(Post p)
+                    if (Post.Posts.FindAll(delegate (Post p)
                     { return p.RelativeLink.Equals(post.RelativeLink); }
                     ).Count < 2)
                     {
@@ -78,6 +81,11 @@ public partial class post : BlogBasePage
                     postView.Location = ServingLocation.SinglePost;
                     pwPost.Controls.Add(postView);
 
+
+                    if (!NetworkManager.IsSearchBot(HttpContext.Current.Request.UserAgent) && (HttpContext.Current.User.Identity.Name != post.Author) && post.IsVisibleToPublic && !IsPostBack)
+                        PostManager.AddViewToPost(id);
+
+
                     // Related posts
                     if (settings.EnableRelatedPosts)
                     {
@@ -101,7 +109,7 @@ public partial class post : BlogBasePage
                                 relatedView.PostItem = this.Post;
                                 phRelatedPosts.Controls.Add(relatedView);
                             }
-                            else 
+                            else
                             {
                                 RelatedPostsBase relatedView = (RelatedPostsBase)LoadControl(relatedPath);
                                 relatedView.PostItem = this.Post;
@@ -123,7 +131,7 @@ public partial class post : BlogBasePage
                     AddMetaDescription();
                     base.AddMetaTag("author", Server.HtmlEncode(Post.AuthorProfile == null ? Post.Author : Post.AuthorProfile.FullName));
 
-                    List<Post> visiblePosts = Post.Posts.FindAll(delegate(Post p) { return p.IsVisible; });
+                    List<Post> visiblePosts = Post.Posts.FindAll(delegate (Post p) { return p.IsVisible; });
                     if (visiblePosts.Count > 0)
                     {
                         AddGenericLink("last", visiblePosts[0].Title, visiblePosts[0].RelativeLink);
@@ -170,43 +178,43 @@ public partial class post : BlogBasePage
 
     }
 
-	/// <summary>
-	/// Gets the next post filtered for invisible posts.
-	/// </summary>
-	private Post GetNextPost(Post post)
-	{
-		if (post.Next == null)
-			return null;
+    /// <summary>
+    /// Gets the next post filtered for invisible posts.
+    /// </summary>
+    private Post GetNextPost(Post post)
+    {
+        if (post.Next == null)
+            return null;
 
-		if (post.Next.IsVisible)
-			return post.Next;
+        if (post.Next.IsVisible)
+            return post.Next;
 
-		return GetNextPost(post.Next);
-	}
+        return GetNextPost(post.Next);
+    }
 
-	/// <summary>
-	/// Gets the prev post filtered for invisible posts.
-	/// </summary>
-	private Post GetPrevPost(Post post)
-	{
-		if (post.Previous == null)
-			return null;
+    /// <summary>
+    /// Gets the prev post filtered for invisible posts.
+    /// </summary>
+    private Post GetPrevPost(Post post)
+    {
+        if (post.Previous == null)
+            return null;
 
-		if (post.Previous.IsVisible)
-			return post.Previous;
+        if (post.Previous.IsVisible)
+            return post.Previous;
 
-		return GetPrevPost(post.Previous);
-	}
+        return GetPrevPost(post.Previous);
+    }
 
-	/// <summary>
-	/// Inits the navigation links above the post and in the HTML head section.
-	/// </summary>
-	private void InitNavigationLinks()
-	{
-		if (BlogSettings.Instance.ShowPostNavigation)
-		{
-			Post next = GetNextPost(Post);
-			Post prev = GetPrevPost(Post);
+    /// <summary>
+    /// Inits the navigation links above the post and in the HTML head section.
+    /// </summary>
+    private void InitNavigationLinks()
+    {
+        if (BlogSettings.Instance.ShowPostNavigation)
+        {
+            Post next = GetNextPost(Post);
+            Post prev = GetPrevPost(Post);
 
             if ((next != null && !next.Deleted) || (prev != null && !prev.Deleted))
             {
@@ -215,13 +223,13 @@ public partial class post : BlogBasePage
                     // Try to load PostNavigation from theme folder
                     var template = BlogSettings.Instance.IsRazorTheme ? "PostNavigation.cshtml" : "PostNavigation.ascx";
 
-                    var path =$"{Utils.ApplicationRelativeWebRoot}Custom/Themes/{BlogSettings.Instance.Theme}/{template}";
+                    var path = $"{Utils.ApplicationRelativeWebRoot}Custom/Themes/{BlogSettings.Instance.Theme}/{template}";
 
                     if (!System.IO.File.Exists(Server.MapPath(path)))
                         path = Utils.ApplicationRelativeWebRoot + "Custom/Controls/Defaults/PostNavigation.ascx";
                     else
                         path = Utils.ApplicationRelativeWebRoot + "Custom/Themes/" + BlogSettings.Instance.GetThemeWithAdjustments(null) + "/PostNavigation.ascx";
-                    
+
                     var navView = (PostNavigationBase)LoadControl(path);
                     navView.CurrentPost = this.Post;
                     phPostNavigation.Controls.Add(navView);
@@ -232,27 +240,27 @@ public partial class post : BlogBasePage
                     Utils.Log("Error loading PostNavigation template", ex);
                 }
             }
-		}
-	}
+        }
+    }
 
-	/// <summary>
-	/// Adds the post's description as the description metatag.
-	/// </summary>
-	private void AddMetaDescription()
-	{
+    /// <summary>
+    /// Adds the post's description as the description metatag.
+    /// </summary>
+    private void AddMetaDescription()
+    {
         var desc = BlogSettings.Instance.Name + " - " + BlogSettings.Instance.Description + " - " + Post.Description;
         base.AddMetaTag("description", Server.HtmlEncode(desc));
-	}
+    }
 
-	/// <summary>
-	/// Adds the post's tags as meta keywords.
-	/// </summary>
-	private void AddMetaKeywords()
-	{
+    /// <summary>
+    /// Adds the post's tags as meta keywords.
+    /// </summary>
+    private void AddMetaKeywords()
+    {
         if (Post.Tags.Count > 0)
-		{
+        {
             base.AddMetaTag("keywords", Server.HtmlEncode(string.Join(",", Post.Tags.ToArray())));
-		}
+        }
         if (ShowFacebookComments)
         {
             var tag = "\n\t<meta property=\"fb:app_id\" content=\"{0}\" />";
@@ -260,7 +268,7 @@ public partial class post : BlogBasePage
         }
     }
 
-	public Post Post;
+    public Post Post;
 
     public static bool ShowBlogengineComments
     {

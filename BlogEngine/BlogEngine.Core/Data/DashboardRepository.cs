@@ -12,12 +12,13 @@ namespace BlogEngine.Core.Data
         /// Get all dashboard items
         /// </summary>
         /// <returns>Dashboard view model</returns>
-        public DashboardVM Get()
+        public DashboardVM Get(bool showSelfPosts)
         {
             if (!Security.IsAuthorizedTo(Rights.ViewDashboard))
                 throw new System.UnauthorizedAccessException();
+            
 
-            return new DashboardVM();
+            return new DashboardVM(showSelfPosts);
         }
     }
 }

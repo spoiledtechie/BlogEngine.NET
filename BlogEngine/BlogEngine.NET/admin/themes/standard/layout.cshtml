@@ -10,7 +10,9 @@
     var userRights = string.Join("','", Security.CurrentUserRights().Select(r => r.Flag).ToArray());
 
     var name = Security.CurrentUser.Identity.Name;
-    var email = Membership.Provider.GetUser(name, true).Email;
+    var user = Membership.Provider.GetUser(name, true);
+    var email = user.Email;
+    var userId = user.ProviderUserKey;
     var profile = new AuthorProfile(name);
     var src = profile.PhotoUrl;
     if (string.IsNullOrEmpty(src))
@@ -32,7 +34,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="format-detection" content="telephone=no" />
     <script type="text/javascript">
-        var UserVars = { Name: '@Html.Raw(Security.CurrentUser.Identity.Name)', IsAdmin: '@Security.IsAdministrator', Rights: ['@Html.Raw(userRights)']  };
+        var UserVars = { Name: '@Html.Raw(Security.CurrentUser.Identity.Name)', UserId: '@userId',  IsAdmin: '@Security.IsAdministrator', Rights: ['@Html.Raw(userRights)']  };
         var ActiveTheme = '@BlogSettings.Instance.Theme'
         var UsageScenario = '@BlogConfig.UsageScenario'
         var ServerTime = '@DateTime.Now'

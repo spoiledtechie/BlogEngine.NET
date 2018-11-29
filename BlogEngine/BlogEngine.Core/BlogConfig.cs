@@ -138,6 +138,15 @@ namespace BlogEngine.Core
                 return _administrativeRole ?? (_administrativeRole = WebConfigurationManager.AppSettings["BlogEngine.AdminRole"] ?? "administrators");
             }
         }
+
+        private static string _writerRole;
+        public static string WriterRole
+        {
+            get
+            {
+                return _writerRole ?? (_writerRole = WebConfigurationManager.AppSettings["BlogEngine.WritersRole"] ?? "writers");
+            }
+        }
         #endregion
 
         #region AnonymousRole

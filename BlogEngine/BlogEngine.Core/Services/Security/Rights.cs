@@ -288,6 +288,11 @@ namespace BlogEngine.Core
         [RightDetails(Category = RightCategory.Custom)]
         ManageExtensions,
 
+
+        [RightDetails(Category = RightCategory.Funds)]
+        AllowedToSetMonthlyEarnings,
+
+
         /// <summary>
         /// A user is allowed to manage widgets.
         /// </summary>
@@ -388,6 +393,9 @@ namespace BlogEngine.Core
         /// <summary>
         /// Extensions, themes, widgets and packages
         /// </summary>
-        Custom
+        Custom,
+        Funds,
+
+        Social
     }
 }

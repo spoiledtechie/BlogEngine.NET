@@ -27,7 +27,7 @@ public class UsersController : ApiController
 
     public HttpResponseMessage Get(string id)
     {
-        var result = repository.FindById(id);
+        var result = repository.GetUser(Convert.ToInt32(id));
         if (result == null)
             return Request.CreateResponse(HttpStatusCode.NotFound);
 

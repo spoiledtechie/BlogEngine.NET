@@ -1999,6 +1999,14 @@
             }
         }
 
+        public long TotalMonthlyViews { get; internal set; }
+        public long TotalViews { get; internal set; }
+        public bool DisabledAutoPosting { get; internal set; }
+        public bool DisablePaymentsForPost { get; internal set; }
+        public bool FromFeed { get; internal set; }
+        public object FeedName { get; internal set; }
+        public object FeedUrl { get; internal set; }
+
         #endregion
     }
 }
