@@ -21,10 +21,7 @@
 <body class="<%=Resources.labels.LangDirection %>">
     <form id="Form1" runat="server">
         <div class="account">
-            <div class="account-header text-center">
-                <a href="https://blogengine.io/" target="_blank">
-                    <img alt="BlogEngine.NET" src="../Content/images/blog/logo.png" /></a>
-            </div>
+            
              <div id="StatusBox">
                     <div id="AdminStatus" runat="server" style="display: none"></div>
                 </div>
