@@ -12,6 +12,11 @@
     {
         BlogEngineConfig.SetCulture(sender, e);
     }
+    void Application_Error(object sender, EventArgs e)
+    {
+        Exception ex = Server.GetLastError();
+        Common.Site.Classes.Exception.ErrorDatabaseManager.AddException(ex, ex.GetType());
+    }
 
     void Application_Start()
     {

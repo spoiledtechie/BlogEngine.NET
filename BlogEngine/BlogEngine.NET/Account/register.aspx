@@ -35,7 +35,7 @@
                                 <asp:TextBox ID="ConfirmPassword" runat="server" CssClass="passwordEntry form-control" TextMode="Password"></asp:TextBox>
                             </div>
                         </div>
-                        <blog:RecaptchaControl ID="recaptcha" runat="server" />
+                        <%--<blog:RecaptchaControl ID="recaptcha" runat="server" />--%>
                         <div class="btn-wrapper text-center">
                             <asp:Button ID="CreateUserButton" 
                                  CssClass="btn btn-success btn-block" 

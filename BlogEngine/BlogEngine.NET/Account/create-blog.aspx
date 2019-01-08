@@ -27,7 +27,7 @@
             <asp:Label ID="ConfirmPasswordLabel" runat="server" CssClass="label-up" AssociatedControlID="ConfirmPassword"><%=Resources.labels.confirmPassword %>:</asp:Label>
             <asp:TextBox ID="ConfirmPassword" runat="server" CssClass="passwordEntry form-control ltr-dir" TextMode="Password"></asp:TextBox>
         </div>
-        <blog:RecaptchaControl ID="recaptcha" runat="server" />
+        <%--<blog:RecaptchaControl ID="recaptcha" runat="server" />--%>
         <asp:Button ID="CreateUserButton" runat="server" Text="Create" CssClass="btn btn-success btn-block" OnClientClick="return ValidateNewBlog()" OnClick="CreateUserButton_Click" />
         <script type="text/javascript">
             $(document).ready(function () {
