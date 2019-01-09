@@ -44,6 +44,30 @@ Copyright (C) Microsoft Corporation. All rights reserved.
     </AssemblyAttributes>
   </ItemGroup>
   <ItemGroup>
+  <ProjectReference Include="..\..\..\Common.Content\Common.Content.csproj">
+      <Project>{E0F7AAFE-6666-4A19-947F-F3FE60381154}</Project>
+      <Name>Common.Site</Name>
+    </ProjectReference>
+
+    <ProjectReference Include="..\..\..\Common.Payment\Common.Payment.csproj">
+      <Project>{E0F7AAFE-6666-4A19-947F-F3FE60381154}</Project>
+      <Name>Common.Site</Name>
+    </ProjectReference>
+
+    <ProjectReference Include="..\..\..\Common.Utilities\Common.Utilities.csproj">
+      <Project>{E0F7AAFE-6666-4A19-947F-F3FE60381154}</Project>
+      <Name>Common.Site</Name>
+    </ProjectReference>
+
+    <ProjectReference Include="..\..\..\Common.EmailServer\Common.EmailServer.Library\Common.EmailServer.Library.csproj">
+      <Project>{E0F7AAFE-6666-4A19-947F-F3FE60381154}</Project>
+      <Name>Common.Site</Name>
+    </ProjectReference>
+
+    <ProjectReference Include="..\..\..\Common.Site\Common.Site.csproj">
+      <Project>{E0F7AAFE-6666-4A19-947F-F3FE60381154}</Project>
+      <Name>Common.Site</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BlogEngine.Core\BlogEngine.Core.csproj">
       <Project>{9ED9914A-FB6E-4D21-8C71-9122E8C3076B}</Project>
       <Name>BlogEngine.Core</Name>

@@ -451,11 +451,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common.EmailServer\Common.EmailServer.Library\Common.EmailServer.Library.csproj">
-      <Project>{8F5564DD-897D-4567-9803-E506B38AD361}</Project>
+      <Project>{8f5564dd-897d-4567-9803-e506b38ad361}</Project>
       <Name>Common.EmailServer.Library</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Common.Payment\Common.Payment.csproj">
-      <Project>{5D6CE564-BA97-4344-BE2E-A680A75A03A5}</Project>
+      <Project>{5d6ce564-ba97-4344-be2e-a680a75a03a5}</Project>
       <Name>Common.Payment</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Common.Site\Common.Site.csproj">
