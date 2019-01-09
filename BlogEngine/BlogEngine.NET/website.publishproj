@@ -54,7 +54,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
       <Name>Common.Site</Name>
     </ProjectReference>
 
-    <ProjectReference Include="..\..\..\Common.Utilities\Common.Utilities.csproj">
+    <ProjectReference Include="..\..\..\Common.Utilities\Common.Utilities\Common.Utilities.csproj">
       <Project>{E0F7AAFE-6666-4A19-947F-F3FE60381154}</Project>
       <Name>Common.Site</Name>
     </ProjectReference>
